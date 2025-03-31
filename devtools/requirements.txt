@@ -1,0 +1,7 @@
+# For pip, as a backup
+fastapi[standard]
+pydantic
+pygit2
+ruff
+uv
+uvicorn
