@@ -3,6 +3,7 @@ RUN apt-get update -qy \
  && apt-get -qy install \
     build-essential \
     g++ \
+    git \
     wget \
  && rm -rf /var/lib/apt/lists/* \
  && pip install --upgrade uv

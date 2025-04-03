@@ -25,6 +25,27 @@ docker build -t nodejs-dev -f Dockerfile-nodejs .
 docker exec -it gitui2-py bash
 ```
 
+### Dev Run and Manual Testing
+To run the service during development with real Git repos, create 2 directories
+
+```
+tests/repos/
+tests/clones/
+```
+
+Create some bare Git repos in the `tests/repos/` dir. We can run the `tests/repo_setup.sh` script.
+Then, clone the repos in `tests/clones`.
+Make some edits, commit and push the changes.
+Now, we can run the service and see the Git repos in action.
+
+We can also run the unit test after completing the above setup. Right now, this is a bit manual
+and brittle.
+
+```
+cd services
+uv run pytest
+```
+
 ### Service Development
 We use FastAPI for backend development. Note the port matches the Docker port mapping.
 
