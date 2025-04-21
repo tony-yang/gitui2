@@ -5,4 +5,4 @@ RUN apt-get update -qy \
  && rm -rf /var/lib/apt/lists/*
 
  ENV PROJECT=gitui2
- WORKDIR /nodejs/$PROJECT
+ WORKDIR /src/$PROJECT
