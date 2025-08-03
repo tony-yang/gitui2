@@ -8,6 +8,6 @@ RUN apt-get update -qy \
  && rm -rf /var/lib/apt/lists/* \
  && pip install --upgrade uv
 
-ENV PYTHONUNBUFFERED=0
-ENV PROJECT=gitui2
+ENV PYTHONUNBUFFERED=0 \
+    PROJECT=gitui2
 WORKDIR /src/$PROJECT

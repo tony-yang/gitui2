@@ -1,0 +1,21 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+build:
+  artifacts:
+    - image: backend-image
+      context: services
+    - image: frontend-image
+      context: frontend
+manifests:
+  rawYaml:
+    - services/k8s/deployment.yaml
+    - frontend/k8s/deployment.yaml
+portForward:
+  - resourceType: deployment
+    resourceName: backend
+    port: 8000
+    localPort: 8000
+  - resourceType: deployment
+    resourceName: frontend
+    port: 3000
+    localPort: 3000

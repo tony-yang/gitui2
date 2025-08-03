@@ -1,0 +1,15 @@
+.egg-info/
+.git/
+.github/
+.pytest_cache/
+.venv/
+.vscode/
+__pycache__/
+build/
+eggs/
+htmlcov/
+*.egg-infosite-packages
+.DS_Store
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache
