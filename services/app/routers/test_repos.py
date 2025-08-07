@@ -6,7 +6,7 @@ client = TestClient(app)
 
 
 def test_read_repos():
-    response = client.get("/repos")
+    response = client.get("/api/v1/repos")
     assert response.status_code == 200
     assert len(response.json()) == 2
     assert response.json()[0]["name"] == "test1"

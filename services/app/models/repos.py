@@ -3,23 +3,12 @@ from datetime import datetime
 import logging
 import os
 
-from pydantic import BaseModel
 import pygit2
 from pygit2 import Repository
 
+from app.routers.models import RepoResponse
 
 logger = logging.getLogger("uvicorn.error")
-
-
-class Repo(BaseModel):
-    """Class for a single Git Repo."""
-
-    name: str
-    url: str
-    description: str | None = None
-    last_commit_message: str | None = None
-    last_commit_time: datetime | None = None
-    last_commit_author: str | None = None
 
 
 @dataclass
@@ -28,7 +17,7 @@ class Repos:
 
     repos_base_path: str
 
-    def read_repos(self) -> list[Repo]:
+    def read_repos(self) -> list[RepoResponse]:
         repo_dirs = [
             os.path.join(self.repos_base_path, d)
             for d in os.listdir(self.repos_base_path)
@@ -44,7 +33,7 @@ class Repos:
             for r in git_repos:
                 head = r[r.head.target]
                 repo_name = r.path.rstrip("/").split("/")[-1]
-                repo = Repo(
+                repo = RepoResponse(
                     name=repo_name,
                     url=r.path.strip(),
                     last_commit_message=head.message.strip(),

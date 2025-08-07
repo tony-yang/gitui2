@@ -10,6 +10,7 @@ ENV PROJECT=gitui2
 WORKDIR /src/$PROJECT
 
 COPY *.toml uv.lock ./
+COPY ./tests ./tests
 RUN uv sync --frozen --no-install-project --no-editable
 
 COPY ./app ./app/

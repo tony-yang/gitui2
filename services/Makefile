@@ -7,6 +7,6 @@ lint:
 	uv run ruff check
 
 test:
-	uv run pytest -vv . --ignore=tests/
+	REPO_PATH="/src/gitui2/services/tests/repos" uv run pytest -vv . --ignore=tests/
 
 precommit: lint format test

@@ -176,6 +176,8 @@ cython_debug/
 explore/
 tests/repos/
 tests/clones/
+services/tests/repos/
+services/tests/clones/
 
 # NodeJS
 # dependencies
