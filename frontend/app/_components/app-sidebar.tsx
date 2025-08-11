@@ -15,7 +15,7 @@ export function AppSidebar() {
   const items = [
     {
       title: "Home",
-      url: "#",
+      url: "/",
       icon: Home,
     }
   ]

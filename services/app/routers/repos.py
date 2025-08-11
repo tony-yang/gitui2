@@ -21,3 +21,9 @@ _BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/tests/repos")
 async def read_repos() -> list[RepoResponse]:
     repos = Repos(repos_base_path=_BASE_REPO_PATH)
     return repos.read_repos()
+
+
+@router.get("/{repo_name}")
+async def get_repo(repo_name: str) -> RepoResponse:
+    repos = Repos(repos_base_path=_BASE_REPO_PATH)
+    return repos.get_repo(name=repo_name)

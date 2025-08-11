@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { useState, useMemo } from "react";
 
@@ -17,7 +18,11 @@ function RepoCard({ repo }: { repo: RepoResponse }) {
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle className="text-lg">{repo.name}</CardTitle>
+                <CardTitle className="text-lg">
+                    <Link href={`/repos/${repo.name}`} className="hover:text-primary transiton-colors">
+                    {repo.name}
+                    </Link>
+                </CardTitle>
                 <CardDescription>{repo.description}</CardDescription>
             </CardHeader>
             <CardContent>

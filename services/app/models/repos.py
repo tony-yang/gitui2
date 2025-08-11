@@ -25,7 +25,9 @@ class Repos:
         ]
         git_repos = []
         for d in repo_dirs:
+            logger.info("## Repo path: %s", d)
             repo_path = pygit2.discover_repository(d)
+            logger.info("## Repo path: %s", repo_path)
             git_repos.append(Repository(repo_path))
 
         repos = []
@@ -43,3 +45,22 @@ class Repos:
                 logger.info(f"{repo=}")
                 repos.append(repo)
         return repos
+
+    def get_repo(self, name: str) -> RepoResponse:
+        git_path = os.path.join(self.repos_base_path, name)
+        logger.info("## Get repo at path: %s", git_path)
+        repo_path = pygit2.discover_repository(git_path)
+        logger.info("## Get repo at path: %s", repo_path)
+        r = Repository(repo_path)
+        if r:
+            head = r[r.head.target]
+            repo_name = r.path.rstrip("/").split("/")[-1]
+            repo = RepoResponse(
+                name=repo_name,
+                url=r.path.strip(),
+                last_commit_message=head.message.strip(),
+                last_commit_time=datetime.fromtimestamp(head.commit_time),
+                last_commit_author=head.author.name.strip(),
+            )
+            logger.info(f"{repo=}")
+        return repo
