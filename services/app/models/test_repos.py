@@ -23,6 +23,7 @@ def test_get_repo():
     repo_name = "test1"
     repo = repos.get_repo(name=repo_name)
     assert isinstance(repo, RepoResponse)
+    assert repo.content is not None
 
 
 def test_get_dir_content():

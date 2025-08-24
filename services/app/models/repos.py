@@ -96,7 +96,7 @@ class Repos:
             last_commit_message=head.message.strip(),
             last_commit_time=datetime.fromtimestamp(head.commit_time),
             last_commit_author=head.author.name.strip(),
-            current_directory_content=content,
+            content=content,
         )
         return repo
 

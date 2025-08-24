@@ -1,8 +1,11 @@
 import { Folder } from "lucide-react";
 
-import { getRepoApiV1ReposRepoNameGet } from "@/app/_client"
+import FileExplore from "@/components/file-explore";
+import {
+    RepoResponse,
+    getRepoApiV1ReposRepoNameGet,
+} from "@/app/_client"
 import  RepoHeader from "@/components/repo-header"
-
 import {
     Card,
     CardContent,
@@ -10,17 +13,19 @@ import {
     CardTitle,
  } from "@/components/ui/card";
 
-function RepoTreeCard() {
+function RepoTreeCard({ repo }:
+    { repo: RepoResponse }
+) {
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle className="text-lg">
-                    <Folder className="w-5 h-5">Files</Folder>
+                <CardTitle className="text-lg leading-none flex gap-2">
+                    <Folder className="w-5 h-5" />File Explorer
                 </CardTitle>
             </CardHeader>
             <CardContent>
                 <div>
-                    File Tree
+                    <FileExplore repo={repo} />
                 </div>
             </CardContent>
         </Card>
@@ -47,14 +52,14 @@ export default async function RepoPage({
         <div className="font-sans min-h-screen pb-20 gap-6">
         {resp.data ? (
             <div>
-                <RepoHeader repo={resp.data} />
+                <RepoHeader repo={resp.data || {} as RepoResponse} />
 
                 <div className="space-y-6">
                     Recent commits
                 </div>
 
                 <div className="space-y-6">
-                    <RepoTreeCard />
+                    <RepoTreeCard repo={resp.data || {} as RepoResponse} />
                 </div>
             </div>
         ) : (
