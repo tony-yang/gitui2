@@ -4,7 +4,6 @@ from app.models.repos import Repos
 from app.routers.models import (
     DirectoryResponse,
     FileResponse,
-    RepoResponse,
 )
 
 
@@ -22,7 +21,7 @@ def test_get_repo():
 
     repo_name = "test1"
     repo = repos.get_repo(name=repo_name)
-    assert isinstance(repo, RepoResponse)
+    assert isinstance(repo, DirectoryResponse)
     assert repo.content is not None
 
 

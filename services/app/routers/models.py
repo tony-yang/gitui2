@@ -6,6 +6,10 @@ from pydantic import BaseModel, Field
 class DirectoryContent(BaseModel):
     """Class representing all the sub-dir and files of a directory."""
 
+    parent_directories: str | None = Field(
+        None,
+        description="A parent directory from repo root leading up to this directory content.",
+    )
     directories: list | None = Field(
         None, description="All the sub-dirs in this directory."
     )

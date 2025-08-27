@@ -28,7 +28,7 @@ async def read_repos() -> list[RepoResponse]:
 
 
 @router.get("/{repo_name}")
-async def get_repo(repo_name: str) -> RepoResponse:
+async def get_repo(repo_name: str) -> DirectoryResponse:
     repos = Repos(repos_base_path=_BASE_REPO_PATH)
     return repos.get_repo(name=repo_name)
 

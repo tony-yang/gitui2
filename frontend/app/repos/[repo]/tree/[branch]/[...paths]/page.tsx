@@ -3,7 +3,7 @@ import { Folder } from "lucide-react";
 import FileExplore from "@/components/file-explore";
 import {
     DirectoryResponse,
-    getRepoApiV1ReposRepoNameGet,
+    getDirContentApiV1ReposRepoNameTreeBranchDirNamesGet,
 } from "@/app/_client"
 import  RepoHeader from "@/components/repo-header"
 import {
@@ -32,15 +32,21 @@ function RepoTreeCard({ repo }:
     )
 }
 
-export default async function RepoPage({
+export default async function TreePage({
     params,
 }: {
-    params: { repo: string };
+    params: { repo: string , branch: string, paths: string[] };
 }) {
-    const { repo } = await params;
-    const resp = await getRepoApiV1ReposRepoNameGet({
+    const { repo, branch, paths } = await params;
+    console.log("rep = %s", repo);
+    console.log("treePaths = ", branch)
+    console.log("treePaths = ", paths)
+
+    const resp = await getDirContentApiV1ReposRepoNameTreeBranchDirNamesGet({
         path: {
             repo_name: repo,
+            branch: branch,
+            dir_names: paths.join("/"),
         },
         responseType: "json",
     });
@@ -48,25 +54,27 @@ export default async function RepoPage({
         console.error(resp.error);
     }
 
+    console.log("resp data = ", resp.data);
+
     return (
         <div className="font-sans min-h-screen pb-20 gap-6">
-        {resp.data ? (
-            <div>
-                <RepoHeader repo={resp.data || {} as DirectoryResponse} />
-
-                <div className="space-y-6">
-                    Recent commits
+            {resp.data ? (
+                <div>
+                    <RepoHeader repo={resp.data || {} as DirectoryResponse} />
+    
+                    <div className="space-y-6">
+                        Recent commits
+                    </div>
+    
+                    <div className="space-y-6">
+                        <RepoTreeCard repo={resp.data || {} as DirectoryResponse} />
+                    </div>
                 </div>
-
-                <div className="space-y-6">
-                    <RepoTreeCard repo={resp.data || {} as DirectoryResponse} />
+            ) : (
+                <div className="text-center text-muted-foreground">
+                    <p className="text-lg font-semibold">Error. No repos found.</p>
                 </div>
-            </div>
-        ) : (
-            <div className="text-center text-muted-foreground">
-                <p className="text-lg font-semibold">Error. No repos found.</p>
-            </div>
-        )}
+            )}
         </div>
     )
 }

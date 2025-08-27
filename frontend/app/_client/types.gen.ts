@@ -6,6 +6,11 @@
  */
 export type DirectoryContent = {
     /**
+     * Parent Directories
+     * A parent directory from repo root leading up to this directory content.
+     */
+    parent_directories?: string | null;
+    /**
      * Directories
      * All the sub-dirs in this directory.
      */
@@ -202,7 +207,7 @@ export type GetRepoApiV1ReposRepoNameGetResponses = {
     /**
      * Successful Response
      */
-    200: RepoResponse;
+    200: DirectoryResponse;
 };
 
 export type GetRepoApiV1ReposRepoNameGetResponse = GetRepoApiV1ReposRepoNameGetResponses[keyof GetRepoApiV1ReposRepoNameGetResponses];

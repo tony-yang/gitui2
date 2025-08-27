@@ -79,20 +79,20 @@ class Repos:
         repo_path = pygit2.discover_repository(git_path)
         return Repository(repo_path)
 
-    def get_repo(self, name: str) -> RepoResponse:
+    def get_repo(self, name: str) -> DirectoryResponse:
         branch = "main"
 
         r = self._get_repo(name)
         if not r:
-            return RepoResponse()
+            return DirectoryResponse()
 
         head = r[r.head.target]
         repo_name = r.path.rstrip("/").split("/")[-1]
         root = r.revparse_single(branch).tree
         content = self._walk_repo_current_layer(repo=r, branch=branch, tree=root)
-        repo = RepoResponse(
-            name=repo_name,
-            url=r.path.strip(),
+        repo = DirectoryResponse(
+            repo_name=repo_name,
+            repo_url=r.path.strip(),
             last_commit_message=head.message.strip(),
             last_commit_time=datetime.fromtimestamp(head.commit_time),
             last_commit_author=head.author.name.strip(),
@@ -148,6 +148,7 @@ class Repos:
         logger.info("Directory oid = %s", oid)
         tree = r.get(oid)
         content = self._walk_repo_current_layer(repo=r, branch=branch, tree=tree)
+        content.parent_directories = dir_names
         resp.content = content
         return resp
 

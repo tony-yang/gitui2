@@ -15,4 +15,4 @@ def test_read_repos():
 def test_get_repo():
     response = client.get("/api/v1/repos/test1")
     assert response.status_code == 200
-    assert response.json()["name"] == "test1"
+    assert response.json()["repo_name"] == "test1"
