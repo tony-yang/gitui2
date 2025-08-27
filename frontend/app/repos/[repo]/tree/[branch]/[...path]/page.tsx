@@ -35,26 +35,21 @@ function RepoTreeCard({ repo }:
 export default async function TreePage({
     params,
 }: {
-    params: { repo: string , branch: string, paths: string[] };
+    params: { repo: string , branch: string, path: string[] };
 }) {
-    const { repo, branch, paths } = await params;
-    console.log("rep = %s", repo);
-    console.log("treePaths = ", branch)
-    console.log("treePaths = ", paths)
+    const { repo, branch, path } = await params;
 
     const resp = await getDirContentApiV1ReposRepoNameTreeBranchDirNamesGet({
         path: {
             repo_name: repo,
             branch: branch,
-            dir_names: paths.join("/"),
+            dir_names: path.join("/"),
         },
         responseType: "json",
     });
     if ( resp.error ) {
         console.error(resp.error);
     }
-
-    console.log("resp data = ", resp.data);
 
     return (
         <div className="font-sans min-h-screen pb-20 gap-6">

@@ -1,4 +1,7 @@
-import { DirectoryResponse } from "@/app/_client";
+import {
+    DirectoryResponse,
+    FileResponse
+} from "@/app/_client";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,7 +11,7 @@ import {
 } from "@/components/ui/breadcrumb"
 
 export default function RepoHeader({ repo }: {
-    repo: DirectoryResponse
+    repo: DirectoryResponse | FileResponse
 }) {
     return (
         <div>
