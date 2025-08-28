@@ -17,8 +17,11 @@ router = APIRouter(
     tags=["repos"],
 )
 
+# Test Git repos dir.
+# _BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/tests/repos")
 
-_BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/tests/repos")
+# Actual Git repos dir.
+_BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/repos")
 
 
 @router.get("/")

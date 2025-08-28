@@ -32,22 +32,28 @@ class Repos:
         git_repos = []
         for d in repo_dirs:
             logger.info("## Repo path: %s", d)
-            repo_path = pygit2.discover_repository(d)
-            git_repos.append(Repository(repo_path))
+            try:
+                repo_path = pygit2.discover_repository(d)
+                git_repos.append(Repository(repo_path))
+            except Exception as e:
+                logger.error("## Discover repo %s error: %s", d, e)
 
         repos = []
         if git_repos:
             for r in git_repos:
-                head = r[r.head.target]
-                repo_name = r.path.rstrip("/").split("/")[-1]
-                repo = RepoResponse(
-                    name=repo_name,
-                    url=r.path.strip(),
-                    last_commit_message=head.message.strip(),
-                    last_commit_time=datetime.fromtimestamp(head.commit_time),
-                    last_commit_author=head.author.name.strip(),
-                )
-                repos.append(repo)
+                try:
+                    head = r[r.head.target]
+                    repo_name = r.path.rstrip("/").split("/")[-1]
+                    repo = RepoResponse(
+                        name=repo_name,
+                        url=r.path.strip(),
+                        last_commit_message=head.message.strip(),
+                        last_commit_time=datetime.fromtimestamp(head.commit_time),
+                        last_commit_author=head.author.name.strip(),
+                    )
+                    repos.append(repo)
+                except Exception as e:
+                    logger.error("## Reading repo %s root failed: %s", repo_name, e)
         return repos
 
     def _walk_repo_current_layer(
@@ -88,7 +94,18 @@ class Repos:
 
         head = r[r.head.target]
         repo_name = r.path.rstrip("/").split("/")[-1]
-        root = r.revparse_single(branch).tree
+        try:
+            root = r.revparse_single(branch).tree
+        except Exception as e:
+            logger.error("Cannot parse repo branch: %s:%s, error: %s", repo_name, branch, e)
+            logger.info("Use fallback default branch")
+            branch = "master"
+            try:
+                root = r.revparse_single(branch).tree
+            except Exception as e:
+                logger.error("Fallback failed too, cannot parse repo branch: %s:%s, error: %s", repo_name, branch, e)
+                return DirectoryResponse()
+
         content = self._walk_repo_current_layer(repo=r, branch=branch, tree=root)
         repo = DirectoryResponse(
             repo_name=repo_name,

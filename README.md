@@ -3,6 +3,24 @@ A GitHub-like UI for a private Git server.
 
 This is V2 of the gitui project, reimplemented in Python. The original gitui was written in Ruby. The V1 project dependency is becoming increasingly difficult to maintain due to new Ruby Gems. Therefore, we decided to reimplement it in Python with new tool stacks.
 
+## Prod Run
+Update the `_BASE_REPO_PATH` in the `routers/repos.py` to an directory containing real git repos. Mount the actual directory into the backend container.
+
+Note the port forwarding is important since the frontend API `app/api.ts` is using the specific port.
+
+```sh
+cd gitui2/services
+docker build -t gitui2-be -f Dockerfile .
+
+cd gitui2/frontend
+docker build -t gitui2-fe -f Dockerfile .
+
+# cd into the directory containing the repos directory.
+# The backend is using 9001 on the host, and the frontend app/api.ts is fetching from 9001.
+docker run -itd --rm -v ${PWD}/gitui:/src/gitui2/repos -p 9001:8000 --name gitui2-be gitui2-be
+docker run -itd --rm -p 9000:3000 --name gitui2-fe gitui2-fe
+```
+
 ## Dev Guide
 To start the dev environment, make sure the system has Skaffold, Docker, Docker Compose, and Make installed. All other dependencies will be installed inside the containers and ready for development.
 
