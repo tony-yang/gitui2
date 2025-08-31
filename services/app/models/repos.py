@@ -42,7 +42,7 @@ class Repos:
         if git_repos:
             for r in git_repos:
                 try:
-                    head = r[r.head.target]
+                    head = r.get(r.head.target)
                     repo_name = r.path.rstrip("/").split("/")[-1]
                     repo = RepoResponse(
                         name=repo_name,
@@ -85,31 +85,58 @@ class Repos:
         repo_path = pygit2.discover_repository(git_path)
         return Repository(repo_path)
 
-    def get_repo(self, name: str) -> DirectoryResponse:
-        branch = "main"
+    def _get_default_branch(self, branches: list[str]) -> str:
+        if not branches:
+            raise ValueError
 
+        b = set(branches)
+        if "main" in b:
+            return "main"
+        elif "master" in b:
+            return "master"
+
+        return branches[0]
+
+    def get_repo(self, name: str, branch: str | None = None) -> DirectoryResponse:
         r = self._get_repo(name)
         if not r:
             return DirectoryResponse()
 
-        head = r[r.head.target]
-        repo_name = r.path.rstrip("/").split("/")[-1]
+        branches = list(r.branches)
+        if not branch:
+            try:
+                branch = self._get_default_branch(branches)
+            except ValueError:
+                logger.error("Could not find a valid branch")
+                return DirectoryResponse()
+
         try:
+            head = r.get(r.head.target)
+            repo_name = r.path.rstrip("/").split("/")[-1]
             root = r.revparse_single(branch).tree
         except Exception as e:
-            logger.error("Cannot parse repo branch: %s:%s, error: %s", repo_name, branch, e)
+            logger.error(
+                "Cannot parse repo branch: %s:%s, error: %s", repo_name, branch, e
+            )
             logger.info("Use fallback default branch")
             branch = "master"
             try:
                 root = r.revparse_single(branch).tree
             except Exception as e:
-                logger.error("Fallback failed too, cannot parse repo branch: %s:%s, error: %s", repo_name, branch, e)
+                logger.error(
+                    "Fallback failed too. Cannot parse repo branch: %s:%s, error: %s",
+                    repo_name,
+                    branch,
+                    e,
+                )
                 return DirectoryResponse()
 
         content = self._walk_repo_current_layer(repo=r, branch=branch, tree=root)
         repo = DirectoryResponse(
             repo_name=repo_name,
             repo_url=r.path.strip(),
+            selected_branch=branch,
+            branches=branches,
             last_commit_message=head.message.strip(),
             last_commit_time=datetime.fromtimestamp(head.commit_time),
             last_commit_author=head.author.name.strip(),
@@ -127,7 +154,8 @@ class Repos:
         # trying to identify every directory, not just the head and tail.
         directories = [d for d in dir_names.rstrip("/").split("/")]
         if len(directories) < 1:
-            return
+            # Directly return the root oid of the branch.
+            return repo.revparse_single(branch)
 
         visited = [root]
         while len(visited) > 0 and len(directories) > 0:

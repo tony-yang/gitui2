@@ -37,6 +37,8 @@ class DirectoryResponse(BaseModel):
     repo_name: str | None = Field(None, description="The repo name.")
     repo_url: str | None = Field(None, description="The repo URL.")
     repo_description: str | None = Field(None, description="Optional repo description.")
+    selected_branch: str | None = Field(None, description="The selected git branch")
+    branches: list[str] | None = Field(None, description="All branches within the repo")
     last_commit_message: str | None = Field(None)
     last_commit_time: datetime | None = Field(None)
     last_commit_author: str | None = Field(None)
@@ -52,9 +54,10 @@ class FileResponse(BaseModel):
     repo_name: str | None = Field(None, description="The repo name.")
     repo_url: str | None = Field(None, description="The repo URL.")
     repo_description: str | None = Field(None, description="Optional repo description.")
+    branch: str | None = Field(None, description="The git branch")
     last_commit_message: str | None = Field(None)
     last_commit_time: datetime | None = Field(None)
     last_commit_author: str | None = Field(None)
-    content: str | None = Field(
+    content: str | bytes | None = Field(
         None, description="Holds file content, if it is a valid file in the git repo."
     )

@@ -18,10 +18,10 @@ router = APIRouter(
 )
 
 # Test Git repos dir.
-# _BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/tests/repos")
+_BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/tests/repos")
 
 # Actual Git repos dir.
-_BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/repos")
+# _BASE_REPO_PATH = os.getenv("REPO_PATH", "/src/gitui2/repos")
 
 
 @router.get("/")
@@ -30,10 +30,10 @@ async def read_repos() -> list[RepoResponse]:
     return repos.read_repos()
 
 
-@router.get("/{repo_name}")
-async def get_repo(repo_name: str) -> DirectoryResponse:
+@router.get("/{repo_name}/tree/{branch}")
+async def get_repo(repo_name: str, branch: str) -> DirectoryResponse:
     repos = Repos(repos_base_path=_BASE_REPO_PATH)
-    return repos.get_repo(name=repo_name)
+    return repos.get_repo(name=repo_name, branch=branch)
 
 
 @router.get("/{repo_name}/tree/{branch}/{dir_names:path}")

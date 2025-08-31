@@ -43,6 +43,16 @@ export type DirectoryResponse = {
      */
     repo_description?: string | null;
     /**
+     * Selected Branch
+     * The selected git branch
+     */
+    selected_branch?: string | null;
+    /**
+     * Branches
+     * All branches within the repo
+     */
+    branches?: Array<string> | null;
+    /**
      * Last Commit Message
      */
     last_commit_message?: string | null;
@@ -80,6 +90,11 @@ export type FileResponse = {
      * Optional repo description.
      */
     repo_description?: string | null;
+    /**
+     * Branch
+     * The git branch
+     */
+    branch?: string | null;
     /**
      * Last Commit Message
      */
@@ -182,35 +197,39 @@ export type ReadReposApiV1ReposGetResponses = {
 
 export type ReadReposApiV1ReposGetResponse = ReadReposApiV1ReposGetResponses[keyof ReadReposApiV1ReposGetResponses];
 
-export type GetRepoApiV1ReposRepoNameGetData = {
+export type GetRepoApiV1ReposRepoNameTreeBranchGetData = {
     body?: never;
     path: {
         /**
          * Repo Name
          */
         repo_name: string;
+        /**
+         * Branch
+         */
+        branch: string;
     };
     query?: never;
-    url: '/api/v1/repos/{repo_name}';
+    url: '/api/v1/repos/{repo_name}/tree/{branch}';
 };
 
-export type GetRepoApiV1ReposRepoNameGetErrors = {
+export type GetRepoApiV1ReposRepoNameTreeBranchGetErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type GetRepoApiV1ReposRepoNameGetError = GetRepoApiV1ReposRepoNameGetErrors[keyof GetRepoApiV1ReposRepoNameGetErrors];
+export type GetRepoApiV1ReposRepoNameTreeBranchGetError = GetRepoApiV1ReposRepoNameTreeBranchGetErrors[keyof GetRepoApiV1ReposRepoNameTreeBranchGetErrors];
 
-export type GetRepoApiV1ReposRepoNameGetResponses = {
+export type GetRepoApiV1ReposRepoNameTreeBranchGetResponses = {
     /**
      * Successful Response
      */
     200: DirectoryResponse;
 };
 
-export type GetRepoApiV1ReposRepoNameGetResponse = GetRepoApiV1ReposRepoNameGetResponses[keyof GetRepoApiV1ReposRepoNameGetResponses];
+export type GetRepoApiV1ReposRepoNameTreeBranchGetResponse = GetRepoApiV1ReposRepoNameTreeBranchGetResponses[keyof GetRepoApiV1ReposRepoNameTreeBranchGetResponses];
 
 export type GetDirContentApiV1ReposRepoNameTreeBranchDirNamesGetData = {
     body?: never;
