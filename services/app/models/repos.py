@@ -109,6 +109,9 @@ class Repos:
             except ValueError:
                 logger.error("Could not find a valid branch")
                 return DirectoryResponse()
+        elif branch == "main":
+            if branch not in branches:
+                branch = "master"
         elif branch not in branches:
             logger.error("Invalid branch")
             return DirectoryResponse()
@@ -121,18 +124,7 @@ class Repos:
             logger.error(
                 "Cannot parse repo branch: %s:%s, error: %s", repo_name, branch, e
             )
-            logger.info("Use fallback default branch")
-            branch = "master"
-            try:
-                root = r.revparse_single(branch).tree
-            except Exception as e:
-                logger.error(
-                    "Fallback failed too. Cannot parse repo branch: %s:%s, error: %s",
-                    repo_name,
-                    branch,
-                    e,
-                )
-                return DirectoryResponse()
+            return DirectoryResponse()
 
         content = self._walk_repo_current_layer(repo=r, branch=branch, tree=root)
         repo = DirectoryResponse(
