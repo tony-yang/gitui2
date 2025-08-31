@@ -91,10 +91,15 @@ export type FileResponse = {
      */
     repo_description?: string | null;
     /**
-     * Branch
-     * The git branch
+     * Selected Branch
+     * The selected git branch
      */
-    branch?: string | null;
+    selected_branch?: string | null;
+    /**
+     * Branches
+     * All branches within the repo
+     */
+    branches?: Array<string> | null;
     /**
      * Last Commit Message
      */

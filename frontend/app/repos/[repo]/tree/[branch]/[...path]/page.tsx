@@ -3,7 +3,8 @@ import {
     getDirContentApiV1ReposRepoNameTreeBranchDirNamesGet,
 } from "@/app/_client"
 import  RepoHeader from "@/components/repo-header"
- import RepoTreeCard from "@/components/repo-tree-card";
+import BranchSelector from "@/components/branch-selector";
+import RepoTreeCard from "@/components/repo-tree-card";
 
 export default async function TreePage({
     params,
@@ -26,12 +27,17 @@ export default async function TreePage({
 
     return (
         <div className="font-sans min-h-screen pb-20 gap-6">
-            {resp.data ? (
+            {resp.data?.repo_name ? (
                 <div>
                     <RepoHeader repo={resp.data || {} as DirectoryResponse} />
     
                     <div className="space-y-6">
                         Recent commits
+                    </div>
+
+                    <div className="space-y-6">
+                        <span>Branch:</span>
+                        <BranchSelector repo={resp.data} />
                     </div>
     
                     <div className="space-y-6">

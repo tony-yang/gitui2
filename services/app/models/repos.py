@@ -109,6 +109,9 @@ class Repos:
             except ValueError:
                 logger.error("Could not find a valid branch")
                 return DirectoryResponse()
+        elif branch not in branches:
+            logger.error("Invalid branch")
+            return DirectoryResponse()
 
         try:
             head = r.get(r.head.target)
@@ -181,9 +184,22 @@ class Repos:
         if not r:
             return DirectoryResponse()
 
+        branches = list(r.branches)
+        if not branch:
+            try:
+                branch = self._get_default_branch(branches)
+            except ValueError:
+                logger.error("Could not find a valid branch")
+                return DirectoryResponse()
+        elif branch not in branches:
+            logger.error("Invalid branch")
+            return DirectoryResponse()
+
         resp = DirectoryResponse(
             repo_name=repo_name,
             repo_url=r.path.strip(),
+            selected_branch=branch,
+            branches=branches,
         )
 
         oid = self._find_directory_oid(repo=r, branch=branch, dir_names=dir_names)
@@ -251,9 +267,22 @@ class Repos:
         if not r:
             return FileResponse()
 
+        branches = list(r.branches)
+        if not branch:
+            try:
+                branch = self._get_default_branch(branches)
+            except ValueError:
+                logger.error("Could not find a valid branch")
+                return FileResponse()
+        elif branch not in branches:
+            logger.error("Invalid branch")
+            return FileResponse()
+
         resp = FileResponse(
             repo_name=repo_name,
             repo_url=r.path.strip(),
+            selected_branch=branch,
+            branches=branches,
         )
         oid = self._find_file_oid(repo=r, branch=branch, file_name=file_name)
         if not oid:

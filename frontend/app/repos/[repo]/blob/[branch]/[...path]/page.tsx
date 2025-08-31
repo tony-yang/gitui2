@@ -11,7 +11,8 @@ import {
     CardContent,
     CardHeader,
     CardTitle,
- } from "@/components/ui/card";
+} from "@/components/ui/card";
+import BranchSelector from "@/components/branch-selector";
 
 function FileContentCard({ repo }:
     { repo: FileResponse }
@@ -58,12 +59,17 @@ export default async function BlobPage({
 
     return (
         <div className="font-sans min-h-screen pb-20 gap-6">
-            {resp.data ? (
+            {resp.data?.repo_name ? (
                 <div>
                     <RepoHeader repo={resp.data || {} as FileResponse} />
 
                     <div className="space-y-6">
                         Recent commits
+                    </div>
+
+                    <div className="space-y-6">
+                        <span>Branch:</span>
+                        <BranchSelector repo={resp.data} />
                     </div>
 
                     <div className="space-y-6">

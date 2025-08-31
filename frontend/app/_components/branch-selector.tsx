@@ -2,6 +2,7 @@
 
 import {
     DirectoryResponse,
+    FileResponse,
 } from "@/app/_client"
 import {
     DropdownMenu,
@@ -13,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link  from "next/link";
 
-export default function BranchSelector({ repo }: { repo: DirectoryResponse}) {
+export default function BranchSelector({ repo }: { repo: DirectoryResponse | FileResponse}) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
